@@ -2,6 +2,7 @@ const express = require('express');
 const sequelize = require('./database/connect'); // Import the database connection
 const bodyParser = require('body-parser');
 const routerApi = require('./routes/api');
+const apiKeyInterceptor = require('./interceptors/request.interceptor');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -13,7 +14,8 @@ app.use(bodyParser.json());
 sequelize.sync({ alter: true }) // Use { force: true } to reset tables
     .then(() => console.log('Database synced'))
     .catch(console.error);
-    
+
+app.use(apiKeyInterceptor);
 // Routes
 app.use('/api', routerApi);
 // Start server
