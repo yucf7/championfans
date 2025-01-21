@@ -1,5 +1,7 @@
 const express = require('express');
-const sequelize = require('./database/connect'); // Import the database connection
+const cors = require('cors');
+
+const sequelize = require('./database/connect');
 const bodyParser = require('body-parser');
 const routerApi = require('./routes/api');
 const apiKeyInterceptor = require('./interceptors/request.interceptor');
@@ -8,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 
 // Sync the models (optional)
