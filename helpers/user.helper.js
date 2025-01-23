@@ -19,20 +19,23 @@ module.exports.create = async (user) =>{
         const createdUser = await User.create(user);
         return createdUser;
     } catch (error) {
-        console.log(error)
-        // Custom error handling
+    
         if (error instanceof ValidationError) {
             if (error.errors && error.message.includes('email')) {
-                return 'Email already exists.';
+                throw Error('email_exists');
             }
-            return error.message;
+            if (error.errors && error.message.includes('phone')) {
+                throw Error('phone_exists');
+            }
+            throw Error(error.message);
+
         }
 
         if (error instanceof Sequelize.DatabaseError) {
-           return 'Database connection error. Please try again later.';
+            throw Error('Database connection error. Please try again later.');
         }
 
-        return {error};
+        throw Error({error});
     }
 }
 
