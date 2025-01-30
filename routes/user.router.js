@@ -3,6 +3,7 @@ const userController = require('../controllers/user.controller');
 const adminLimiter = require('../middlewares/rate-limiter.mid');
 
 router.post('/', userController.create);
+router.get('/', userController.getAll);
 router.post('/admin', adminLimiter, userController.createAdmin);
 router.post('/admin-login', userController.adminLogin);
 

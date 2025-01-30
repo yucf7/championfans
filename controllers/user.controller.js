@@ -36,3 +36,14 @@ module.exports.adminLogin = async (req, res) => {
       }
     }
   };
+
+
+  module.exports.getAll = async (req, res) => {
+    try {
+      const users = await userHelper.getAll();
+      return res.status(200).json(users); // Use 200 for successful login
+    } catch (error) {
+      // Handle specific errors with appropriate status codes
+        return res.status(500).json({ message: "Internal server error" }); // 500 for server-side errors
+    }
+  };

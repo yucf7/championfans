@@ -90,6 +90,10 @@ module.exports.adminLogin = async (login) => {
     }
   };
 
+  module.exports.getAll = async ()=>{
+    return User.findAll();
+  }
+
 function createToken(user){
     return jwt.sign(
         {
