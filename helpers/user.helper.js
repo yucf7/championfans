@@ -39,6 +39,9 @@ module.exports.create = async (user) =>{
     }
 }
 
+module.exports.getAll = async ()=>{
+    return User.findAll();
+  }
 
 function generatePassword() {
     const length = 8;
