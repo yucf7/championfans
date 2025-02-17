@@ -12,12 +12,21 @@ module.exports.create = async (req, res) => {
 
 module.exports.getAll = async (req, res) => {
   try {
-    const { lastId, limit = 10 } = req.query; // `lastId` to get the next set of records
-    const offset = lastId ? { where: { id: { [Op.gt]: lastId } } } : {};
+    const { type, page = 1, limit = 20 } = req.query;
+
+    // Calculate offset based on the page and limit
+    const offset = (page - 1) * limit;
+
+    // Build the where conditions dynamically based on query parameters
+    const whereConditions = {};
+    if (type) {
+      whereConditions.type = type; // Filter by type if provided
+    }
 
     const media = await Media.findAll({
+      where: whereConditions,
       limit: Number(limit),
-      ...offset,
+      offset: offset,  // Pagination offset
     });
 
     res.status(200).json(media);
