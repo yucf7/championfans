@@ -3,8 +3,7 @@ const Media = require("../models/media.model");
 
 module.exports.create = async (req, res) => {
   try {
-    const { title, content, img, author } = req.body;
-    const article = await Article.create({ title, content, img, author });
+    const article = await Article.create(req.body);
     res.status(201).json(article);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -13,12 +12,14 @@ module.exports.create = async (req, res) => {
 
 module.exports.getAll = async (req, res) => {
   try {
-    const { lastId, limit = 10 } = req.query;
-    const offset = lastId ? { where: { id: { [Op.gt]: lastId } } } : {};
+    const { page = 1, limit = 20 } = req.query;
+
+    // Calculate offset based on the page and limit
+    const offset = (page - 1) * limit;
 
     const articles = await Article.findAll({
       limit: Number(limit),
-      ...offset,
+      offset: offset,  // Pagination offset
     });
 
     res.status(200).json(articles);

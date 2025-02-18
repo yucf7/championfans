@@ -24,6 +24,10 @@ const Article = sequelize.define('Article', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   timestamps: true,
 });
