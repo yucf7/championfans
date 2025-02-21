@@ -4,7 +4,7 @@ const { ADMIN_PASS } = process.env;
 module.exports.create = async (req, res) => {
     try{
         const user = await userHelper.create(req.body);
-        return res.status(201).json(user);
+        return res.status(201).json({success: true});
     }catch(error){
         console.log(error)
         return res.status(500).json({message: error.message ? error.message : error});
