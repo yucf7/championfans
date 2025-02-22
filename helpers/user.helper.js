@@ -37,10 +37,24 @@ module.exports.create = async (user) => {
 };
 
 
-  module.exports.getAll = async ()=>{
-    return User.findAll();
+  module.exports.getAll = async (isAdmin)=>{
+    return User.findAll({where: {isAdmin}});
   }
 
+
+  module.exports.deletUser = async (id)=>{
+    try {
+      const user = await User.findByPk(id);
+      if (!user) {
+        throw Error("User not found");
+
+      }
+      await user.destroy();
+      return true
+    } catch (error) {
+      throw Error(error);
+    }
+  }
 
 function generatePassword() {
   const length = 8;
