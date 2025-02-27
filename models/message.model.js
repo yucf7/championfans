@@ -19,7 +19,6 @@ const Message = sequelize.define('Message', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   message: {
     type: DataTypes.TEXT,

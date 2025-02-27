@@ -4,8 +4,11 @@ const jwt = require('jsonwebtoken'); // For JWT verification
 // Configuration for protected routes
 const protectedRoutes = {
   '/api/messages': ['GET'], 
-  '/api/admin': ['GET', 'POST'], 
-  // Add more routes and methods as needed
+  '/api/users': ['GET', 'DELETE'], 
+  '/api/auth/admin': ['POST'], 
+  '/api/messages': ['GET'], 
+  '/api/articles': ['POST', 'PUT', 'DELETE'], 
+  '/api/media': ['POST', 'PUT', 'DELETE'], 
 };
 
 // Middleware to check API key and token
@@ -34,6 +37,7 @@ const apiKeyInterceptor = (req, res, next) => {
     try {
       // Verify the token
       const decoded = jwt.verify(token.replace('Bearer ', ''), JWT_SECRET);
+      console.log(decoded)
 
       // Check if the user is an admin
       if (!decoded.isAdmin) {

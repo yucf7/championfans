@@ -18,7 +18,7 @@ module.exports.checkAdmin = (req, res) => {
     }
 
     // Check if the user has an 'admin' role
-    if (decoded.isAdmin) {
+    if (!decoded.isAdmin) {
       return res.status(403).json({ message: 'Access denied: Admins only' });
     }
 

@@ -12,7 +12,7 @@ module.exports.create = async (req, res)=>{
 module.exports.getAll = async (req, res)=>{
     try{
         const message = await messageHelper.getAll(req.body);
-        return res.status(201).json(message);
+        return res.status(200).json(message);
     }catch(error){
         return res.status(500).json({message: error.message ? error.message : error});
     }

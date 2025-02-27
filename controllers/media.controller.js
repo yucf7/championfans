@@ -27,6 +27,7 @@ module.exports.getAll = async (req, res) => {
       where: whereConditions,
       limit: Number(limit),
       offset: offset,  // Pagination offset
+      order: [['updatedAt', 'DESC']], // Sort by updatedAt (latest first)
     });
 
     res.status(200).json(media);
