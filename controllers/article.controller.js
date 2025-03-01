@@ -31,14 +31,24 @@ module.exports.getAll = async (req, res) => {
 module.exports.getById = async (req, res) => {
   try {
     const article = await Article.findByPk(req.params.id);
+    
     if (!article) {
       return res.status(404).json({ error: "Article not found" });
     }
+
+    const views = article.views === null ? 0 : Number(article.views);
+
+    article.views = views + 1;
+
+    await article.save();
+
     res.status(200).json(article);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 module.exports.update = async (req, res) => {
   try {

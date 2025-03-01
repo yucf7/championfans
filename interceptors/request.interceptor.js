@@ -1,50 +1,40 @@
-const { API_KEY, JWT_SECRET } = process.env; // Store your API key and JWT secret in environment variables
-const jwt = require('jsonwebtoken'); // For JWT verification
+const { API_KEY, JWT_SECRET } = process.env;
+const jwt = require('jsonwebtoken');
 
-// Configuration for protected routes
 const protectedRoutes = {
   '/api/messages': ['GET'], 
   '/api/users': ['GET', 'DELETE'], 
-  '/api/auth/admin': ['POST'], 
+  '/api/auth/newadmin': ['POST'], 
   '/api/messages': ['GET'], 
   '/api/articles': ['POST', 'PUT', 'DELETE'], 
   '/api/media': ['POST', 'PUT', 'DELETE'], 
 };
 
-// Middleware to check API key and token
 const apiKeyInterceptor = (req, res, next) => {
   const apiKey = req.headers['x-api-key'];
   const token = req.headers['authorization'];
 
-  // Check API key
-  if (!apiKey) {
-    return res.status(400).json({ message: 'API key is required' });
-  }
-
-  if (apiKey !== API_KEY) {
+  if (!apiKey || apiKey !== API_KEY) {
     return res.status(403).json({ message: 'Forbidden: Invalid API key' });
   }
 
-  // Check if the current route and method require a token
-  const route = req.path;
   const method = req.method.toUpperCase();
 
-  if (protectedRoutes[route] && protectedRoutes[route].includes(method)) {
+  // Find a matching protected route (handles dynamic routes)
+  const matchedRoute = Object.keys(protectedRoutes).find(route => req.path.startsWith(route));
+  if (matchedRoute && protectedRoutes[matchedRoute].includes(method)) {
+    try {
+      
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized: Token is required' });
     }
 
-    try {
-      // Verify the token
       const decoded = jwt.verify(token.replace('Bearer ', ''), JWT_SECRET);
-      console.log(decoded)
-
-      // Check if the user is an admin
+      
       if (!decoded.isAdmin) {
         return res.status(403).json({ message: 'Forbidden: Admin access required' });
       }
 
-      // Attach the decoded user to the request object
       req.user = decoded;
     } catch (error) {
       return res.status(401).json({ message: 'Unauthorized: Invalid token' });

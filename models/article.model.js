@@ -28,6 +28,10 @@ const Article = sequelize.define('Article', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  views: {
+    type: DataTypes.BIGINT,
+    allowNull: true,
+  }
 }, {
   timestamps: true,
 });
